@@ -1,0 +1,1607 @@
+<!doctype html>
+<html lang="ru" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SmartPlayer — Руководство пользователя</title>
+  <meta name="description" content="Руководство пользователя SmartPlayer CMS — управление устройствами, работа с контентом, трансляции и отчёты." />
+
+  <!-- Open Graph / Поделиться -->
+  <meta property="og:title" content="SmartPlayer — Руководство пользователя" />
+  <meta property="og:description" content="Полное руководство по использованию SmartPlayer CMS: добавление устройств, загрузка контента, трансляции и отчёты." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://your-domain.com/manual" />
+  <meta property="og:image" content="image/png/Лого/Лого SP.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SmartPlayer — Руководство пользователя" />
+  <meta name="twitter:description" content="Полное руководство по использованию SmartPlayer CMS." />
+
+  <!-- Предзагрузка внешних ресурсов -->
+  <link rel="preconnect" href="https://wiki.smartplayer.org" />
+  <link rel="preconnect" href="https://smartplayer.atlassian.net" />
+
+  <style>
+    @keyframes zoomIn {
+      from { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Для пользователей, чувствительных к анимациям */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --muted-light: #9ca3af;
+      --radius: 8px;
+      --radius-lg: 12px;
+      --gap: 20px;
+      --nav-w: 260px;
+      --maxw: 1200px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .logo {
+      width: 58px;
+      height: 58px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--accent), #1d4ed8);
+      padding: 4px;
+    }
+
+    .logo img {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+    }
+
+    .header-text h1 {
+      font-size: 18px;
+      margin: 0 0 4px 0;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .meta {
+      display: flex;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 12px;
+      flex-wrap: wrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: var(--nav-w) 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    nav.card {
+      background: var(--card);
+      padding: 0;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid #e5e7eb;
+      position: sticky;
+      top: 20px;
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+    }
+
+    .toc-header {
+      padding: 16px;
+      border-bottom: 1px solid #e5e7eb;
+      background: var(--accent-light);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .toc-header h3 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .search-container {
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 32px 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 13px;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .toc-list {
+      list-style: none;
+      padding: 8px 0;
+      margin: 0;
+    }
+
+    .toc-list li {
+      margin: 0;
+    }
+
+    .toc-list li.active {
+      background: var(--accent-light);
+    }
+
+    .toc-list a {
+      display: block;
+      padding: 10px 16px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      border-left: 3px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .toc-list li.active a,
+    .toc-list a:hover {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .toc-list li.search-highlight {
+      background: #fef3c7;
+    }
+
+    .toc-list li.search-highlight a {
+      color: #92400e;
+      border-left-color: #f59e0b;
+    }
+
+    main.card {
+      background: var(--card);
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      border: 1px solid #e5e7eb;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn.secondary {
+      background: white;
+      color: var(--accent);
+      border: 1px solid #d1d5db;
+    }
+
+    .btn.secondary:hover {
+      background: #f9fafb;
+      border-color: var(--accent);
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 24px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e5e7eb;
+      color: #111827;
+      font-weight: 600;
+    }
+
+    h2:first-of-type {
+      margin-top: 0;
+    }
+
+    h3 {
+      font-size: 15px;
+      margin: 16px 0 8px;
+      color: #374151;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 8px 0 12px;
+      color: #4b5563;
+      line-height: 1.6;
+    }
+
+    ol, ul {
+      margin: 8px 0 16px 20px;
+      color: #4b5563;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    .note {
+      background: #f0f9ff;
+      border-left: 3px solid var(--accent);
+      padding: 12px;
+      border-radius: 6px;
+      margin: 16px 0;
+      font-size: 13px;
+      color: #1e40af;
+    }
+
+    .note strong {
+      color: #1e3a8a;
+    }
+
+    /* Универсальный контейнер для изображений с подписью */
+    .zoomable-container {
+      margin: 16px 0;
+      border-radius: var(--radius);
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      min-height: 200px;
+      max-height: none;
+      overflow: visible;
+    }
+
+    .zoomable-container.main-image {
+      margin-bottom: 24px;
+    }
+
+    .zoomable-container:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+    }
+
+    .zoomable-container:hover::after {
+      content: "↗️ Увеличить";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 6px 12px;
+      background: rgba(0, 0, 0, 0.85);
+      color: white;
+      font-size: 13px;
+      border-radius: 6px;
+      z-index: 3;
+      pointer-events: none;
+      animation: fadeIn 0.3s ease;
+      white-space: nowrap;
+      max-width: 160px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .zoomable-container img {
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+      align-self: center;
+      padding: 10px;
+    }
+
+    .zoomable-container:hover img {
+      transform: scale(1.02);
+    }
+
+    .grid-label,
+    .caption {
+      display: block;
+      padding: 8px 12px;
+      background: #f3f4f6;
+      color: var(--muted);
+      font-size: 12px;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      word-break: break-word;
+      flex-shrink: 0;
+    }
+
+    .caption code {
+      background: #e5e7eb;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 11px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    @media (min-width: 768px) {
+      .steps-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .step-card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: var(--radius);
+      padding: 12px;
+      text-align: center;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      min-height: 180px;
+      overflow: visible;
+    }
+
+    .step-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+    }
+
+    .step-number {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background: var(--accent);
+      color: white;
+      border-radius: 50%;
+      line-height: 24px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 0 auto 8px;
+    }
+
+    .step-card img {
+      width: 100%;
+      height: auto;
+      max-height: 120px;
+      object-fit: contain;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      transition: transform 0.3s ease;
+      padding: 0;
+      align-self: center;
+    }
+
+    .step-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .step-title {
+      font-size: 12px;
+      color: #374151;
+      font-weight: 500;
+      margin-top: auto;
+      word-break: break-word;
+    }
+        .resource-buttons {
+      display: flex;
+      gap: 16px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .resource-btn {
+      display: block;
+      text-decoration: none;
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid transparent;
+      position: relative;
+      flex: 1;
+      min-width: 250px;
+      max-width: 300px;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .resource-btn:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border-color: var(--accent);
+    }
+
+    .resource-btn:active {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    .resource-btn-content {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .resource-btn img {
+      width: 100%;
+      height: auto;
+      max-height: 80px;
+      object-fit: contain;
+      margin-bottom: 12px;
+      transition: transform 0.3s ease;
+    }
+
+    .resource-btn:hover img {
+      transform: scale(1.05);
+    }
+
+    .resource-btn-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .resource-btn-bz {
+      border-top: 4px solid #4f46e5;
+    }
+
+    .resource-btn-tp {
+      border-top: 4px solid #059669;
+    }
+
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 95vw;
+      max-height: 95vh;
+      cursor: grab;
+      transition: transform 0.1s ease;
+      overflow: hidden;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .lightbox-content.grabbing {
+      cursor: grabbing;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 95vh;
+      object-fit: contain;
+      display: block;
+      transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1);
+      transform-origin: center center;
+    }
+
+    .lightbox-controls {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 12px 20px;
+      border-radius: 30px;
+      backdrop-filter: blur(10px);
+      z-index: 2001;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .lightbox-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      color: white;
+      font-size: 20px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .lightbox-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: scale(1.1);
+    }
+
+    .lightbox-btn:active {
+      transform: scale(0.95);
+    }
+
+    #lb-reset {
+      min-width: 60px;
+      width: auto;
+      padding: 0 12px;
+      border-radius: 22px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 25px;
+      right: 25px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.95);
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 2001;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    .lightbox-close:hover {
+      background: white;
+      transform: rotate(90deg) scale(1.1);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .lightbox-close:active {
+      transform: rotate(90deg) scale(0.95);
+    }
+
+    .lightbox-caption {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 14px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 12px 20px;
+      border-radius: 8px;
+      max-width: 80%;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      z-index: 2001;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .zoom-level {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 13px;
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 10px 18px;
+      border-radius: 20px;
+      z-index: 2001;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      min-width: 70px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      white-space: nowrap;
+    }
+
+    .drag-hint {
+      position: fixed;
+      bottom: 160px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 13px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 8px 12px;
+      border-radius: 6px;
+      z-index: 2001;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    footer {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      nav.card {
+        position: static;
+        max-height: none;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 12px;
+      }
+
+      main.card {
+        padding: 16px;
+      }
+
+      .controls {
+        justify-content: center;
+      }
+
+      .btn {
+        flex: 1;
+        justify-content: center;
+        min-width: 120px;
+      }
+
+      .lightbox-controls {
+        bottom: 20px;
+        padding: 10px 16px;
+        gap: 8px;
+      }
+
+      .lightbox-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+      }
+
+      #lb-reset {
+        min-width: 50px;
+        padding: 0 10px;
+        font-size: 13px;
+      }
+
+      .lightbox-close {
+        top: 20px;
+        right: 20px;
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+      }
+
+      .drag-hint {
+        bottom: 140px;
+        font-size: 12px;
+      }
+
+      .resource-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .resource-btn {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .zoom-level {
+        bottom: 80px;
+        padding: 8px 14px;
+        font-size: 12px;
+        min-width: 60px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .meta {
+        justify-content: center;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .lightbox-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 90%;
+        bottom: 15px;
+      }
+
+      .drag-hint {
+        bottom: 120px;
+        width: 90%;
+        text-align: center;
+      }
+
+      .resource-btn {
+        min-width: 100%;
+      }
+
+      .zoom-level {
+        bottom: 70px;
+        font-size: 11px;
+        padding: 6px 12px;
+        min-width: 50px;
+      }
+    }
+
+    @media print {
+      @page {
+        margin: 1cm;
+      }
+
+      body {
+        background: white;
+        color: black;
+        font-size: 12pt;
+        line-height: 1.5;
+      }
+
+      .container {
+        max-width: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      nav.card, .controls, .resource-buttons {
+        display: none !important;
+      }
+
+      .header {
+        border-bottom: 2px solid #000;
+        margin-bottom: 1cm;
+        flex-direction: row;
+      }
+
+      .logo {
+        background: white;
+        border: 1px solid #000;
+      }
+
+      main.card {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .zoomable-container {
+        border: 1px solid #ccc !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin: 1cm 0 !important;
+      }
+
+      img {
+        max-width: 100% !important;
+        height: auto !important;
+        break-inside: avoid;
+      }
+
+      h2 {
+        page-break-after: avoid;
+        break-after: avoid;
+        border-bottom: 2px solid #000;
+        margin-top: 1.5cm !important;
+      }
+
+      h2:first-of-type {
+        margin-top: 0 !important;
+      }
+
+      .note {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        border-left: 3px solid #000;
+        background: #f0f0f0;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .steps-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      section {
+        page-break-inside: auto;
+      }
+
+      h2, h3 {
+        page-break-after: avoid;
+      }
+
+      p, ul, ol {
+        page-break-inside: avoid;
+      }
+
+      .zoomable-container:hover::after,
+      .step-card:hover::after {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo">
+      <img src="image/png/Лого/Лого SP.png" alt="SmartPlayer Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='SP'; this.parentElement.style.color='white'; this.parentElement.style.fontWeight='bold'; this.parentElement.style.fontSize='18px';">
+    </div>
+    <div class="header-text">
+      <h1>SmartPlayer — Руководство пользователя</h1>
+      <div class="meta">
+        <span>Версия: 1.9</span>
+        <span>Обновлено: 2026-01-29</span>
+        <span>Автор: SmartPlayer Team — <em><b>Бровкин М.Н.</b></em></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <nav class="card" id="toc" aria-label="Содержание руководства">
+      <div class="toc-header">
+        <h3>Содержание руководства</h3>
+        <div class="search-container">
+          <input type="text" class="search-input" id="search-input" placeholder="Поиск по руководству..." aria-label="Поиск по содержанию">
+          <div class="search-icon" aria-hidden="true">🔍</div>
+        </div>
+      </div>
+      <ul class="toc-list" id="toc-list"></ul>
+    </nav>
+
+    <main class="card" id="content" role="main">
+      <div class="controls">
+        <button class="btn" onclick="window.print()" aria-label="Распечатать руководство">
+          🖨️ Печать / PDF
+        </button>
+      </div>
+
+      <!-- Введение -->
+      <section id="intro" class="section">
+        <h2 id="intro-title" style="text-align: center;">SmartPlayer</h2>
+        <p><strong>SmartPlayer CMS</strong> — это инструмент для управления контентом и его отображения на цифровых экранах. В этом руководстве мы покажем, как добавлять устройства, загружать контент, создавать трансляции и контролировать их.</p>
+      </section>
+
+      <!-- Авторизация -->
+      <section id="auth" class="section">
+        <h2 id="auth-title">🌐 Вход в личный кабинет</h2>
+        <figure class="zoomable-container main-image">
+          <img class="zoomable" src="image/png/Авторизация.png" alt="Экран авторизации" data-caption="Авторизация: введите логин (email) и пароль для входа в систему" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+        </figure>
+
+        <ol>
+          <li>Перейдите по адресу: <a href="https://cms.smartplayer.org/#/login" target="_blank" rel="noopener noreferrer" class="content-link">https://cms.smartplayer.org/#/login</a></li>
+          <li>Введите: почту и пароль</li>
+          <li>Нажмите <strong>«Войти»</strong></li>
+          <li>Забыли пароль? Нажмите <strong>«Не получается войти?»</strong> для восстановления доступа</li>
+        </ol>
+
+        <div class="note">
+          <strong>Если вход невозможен:</strong> <em>проверьте правильность ввода e-mail, предоставлен ли вам доступ в личный кабинет и наличие интернет-соединения.</em>
+        </div>
+      </section>
+
+      <!-- Обзор -->
+      <section id="overview" class="section">
+        <h2 id="overview-title">🖥️ Обзор интерфейса</h2>
+        <p>После входа вы попадёте в раздел <strong>Обзор</strong>, где представлен <strong>Dashboard</strong> личного кабинета: </p>
+
+        <ul>
+          <li>Статус ваших устройств.</li>
+          <li>Активные трансляции.</li>
+          <li>Использование хранилища.</li>
+          <li>Последние сессии.</li>
+          <li>Документация.</li>
+          <li>Техническая поддержка.</li>
+        </ul>
+
+        <figure class="zoomable-container main-image">
+          <img class="zoomable" src="image/png/ЛК - Обзор.png" alt="Панель управления Dashboard" data-caption="Dashboard: сводка по устройствам, активные трансляции и предупреждения" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+        </figure>
+
+        <p><strong>Левое меню навигации:</strong></p>
+        <ul>
+          <li><strong>Обзор</strong> — dashboard личного кабинета.</li>
+          <li><strong>Устройства</strong> — добавление устройств и управление ими.</li>
+          <li><strong>Контент</strong> — медиатека.</li>
+          <li><strong>Быстрая отправка</strong> — пошаговое создание трансляций.</li>
+          <li><strong>Трансляции</strong> — все созданные трансляции.</li>
+          <li><strong>Расписание</strong> — планировщик трансляций.</li>
+          <li><strong>Отчёты</strong> — формирование отчётов.</li>
+          <li><strong>Настройки</strong> — параметры личного кабинета.</li>
+          <li><strong>Дистрибутивы</strong> — клиентские приложения.</li>
+        </ul>
+      </section>
+
+      <!-- Устройства -->
+      <section id="devices" class="section">
+        <h2 id="devices-title">📱 Добавление устройства</h2>
+        <p>Раздел для управления устройствами и их добавления.</p>
+
+        <h3>Список устройств — общий вид</h3>
+        <figure class="zoomable-container main-image">
+          <img class="zoomable" src="image/png/ЛК - Устройства.png" alt="Список устройств" data-caption="Список устройств с фильтрами, группами и статусами" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+        </figure>
+
+        <h3>Карточка устройства и добавление</h3>
+        <div class="grid-2">
+          <figure class="zoomable-container">
+            <img class="zoomable" src="image/png/Добавление устройства.png" alt="Форма добавления нового устройства" data-caption="Форма добавления нового устройства" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+            <figcaption class="grid-label">Добавление устройства</figcaption>
+          </figure>
+          <figure class="zoomable-container">
+            <img class="zoomable" src="image/png/Параметры устройства.png" alt="Карточка устройства" data-caption="Карточка устройства" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+            <figcaption class="grid-label">Карточка устройства</figcaption>
+          </figure>
+        </div>
+
+        <h3>Шаг 1: Установка приложения</h3>
+        <ol>
+          <li>Установите приложение SmartPlayer на ваше устройство.</li>
+          <li>Скачайте клиентское приложение из раздела <strong>«Дистрибутивы»</strong> для вашей операционной системы устройства.</li>
+        </ol>
+
+        <h3>Шаг 2: Активация</h3>
+        <ol>
+          <li>В личном кабинете: <strong>Устройства → Добавить устройство.</strong></li>
+          <li>Введите <strong>9-значный код</strong>, который появится на экране.</li>
+          <li>Заполните информацию об устройстве (название, местоположение, часовой пояс, ориентацию).</li>
+          <li>Сохраните.</li>
+        </ol>
+
+        <div class="note">
+          <strong>Цветовые статусы устройств:</strong><br>
+          🟢 <strong>Зелёный</strong> — <strong>онлайн</strong><br>
+          ⚪ <strong>Серый</strong> — <strong>оффлайн</strong><br>
+          🔴 <strong>Красный</strong> — <strong>ошибка</strong><br>
+        </div>
+      </section>
+
+      <!-- Управление устройством -->
+      <section id="device-menu" class="section">
+        <h2 id="device-menu-title">⚙️ Управление устройством</h2>
+        <p>В карточке устройства доступны:</p>
+
+        <figure class="zoomable-container main-image">
+          <img class="zoomable" src="image/png/ЛК - меню устройства.png" alt="Меню устройства" data-caption="Меню устройства с разделами" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+        </figure>
+
+        <ul>
+          <li><strong>Обновление скриншота</strong> — просмотр текущего изображения на устройстве</li>
+          <li><strong>Перезагрузка</strong> — устройства или приложения</li>
+          <li><strong>Выключение или Спящий режим</strong></li>
+          <li><strong>Управление громкостью</strong></li>
+          <li><strong>Настройка и информация об устройстве</strong></li>
+        </ul>
+
+        <div class="note">
+          <p><strong>Важно:</strong> Для обновления скриншота убедитесь, что устройство в сети.</p>
+        </div>
+      </section>
+
+      <!-- Контент -->
+      <section id="content-management" class="section">
+        <h2 id="content-title">📄 Контент</h2>
+        <p>Поддерживаемые форматы:</p>
+
+        <div class="grid-2">
+          <figure class="zoomable-container">
+            <img class="zoomable" src="image/png/Контент.png" alt="Библиотека контента" data-caption="Библиотека контента с фильтрами и превью файлов" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+            <figcaption class="grid-label">Библиотека контента</figcaption>
+          </figure>
+          <figure class="zoomable-container">
+            <img class="zoomable" src="image/png/Загрузка.png" alt="Загрузка контента" data-caption="Загрузка файлов" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+            <figcaption class="grid-label">Загрузка контента</figcaption>
+          </figure>
+        </div>
+
+        <ul>
+          <li><strong>Видео:</strong> MP4.</li>
+          <li><strong>Изображения:</strong> JPG, PNG, GIF.</li>
+          <li><strong>Аудио:</strong> MP3.</li>
+          <li><strong>Документы:</strong> PDF.</li>
+          <li><strong>Виджеты.</strong></li>
+          <li><strong>Веб-контент.</strong></li>
+          <li><strong>Медиа-поток (онлайн трансляция).</strong></li>
+        </ul>
+
+        <h3>Как загрузить</h3>
+        <ol>
+          <li>Перейдите в раздел <strong>«Контент»</strong></li>
+          <li>Используйте любой удобный способ загрузки:
+            <ul>
+              <li>Перетащите файлы с рабочего стола в открытом разделе Контент путем <strong>Drag & Drop.</strong></li>
+              <li>Нажмите <strong>«Загрузить»</strong> для выбора файлов.</li>
+              <li>Импортируйте с «Яндекс Диска».</li>
+              <li>Загрузите видео файл с конвертацией в MP4.</li>
+            </ul>
+          </li>
+        </ol>
+
+        <div class="note">
+          <b>Важно</b>: <em>Конвертирование в MP4 можно настроить в личном кабинете в разделе <b>"Параметры загружаемого видео"</b>.</em>
+        </div>
+
+        <div class="note">
+          <strong>Максимальный размер одного загружаемого файла</strong> — 4 ГБ (можно увеличить по запросу).
+        </div>
+      </section>
+
+      <!-- Быстрая отправка -->
+      <section id="quicksend" class="section">
+        <h2 id="quicksend-title">🚀 Быстрая отправка контента</h2>
+        <p>Самый простой и быстрый способ отправить контент на экраны:</p>
+
+        <figure class="zoomable-container">
+          <img class="zoomable" src="image/png/Быстрая отправка - шаг 1.png" alt="Quick Send" data-caption="Быстрая отправка контента" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+        </figure>
+
+        <div class="steps-grid">
+          <figure class="zoomable-container step-card">
+            <div class="step-number">1</div>
+            <img class="zoomable" src="image/png/Настройка.png" alt="Шаг 1: Настройка" data-caption="Шаг 1 — выбор и настройка зон трансляции" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+            <figcaption class="step-title">Настройка разрешения</figcaption>
+          </figure>
+          <figure class="zoomable-container step-card">
+            <div class="step-number">2</div>
+            <img class="zoomable" src="image/png/TimeLine.png" alt="Шаг 1.1: Timeline" data-caption="Шаг 1.1 — настройка таймлайна" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+            <figcaption class="step-title">Настройка Timeline</figcaption>
+          </figure>
+          <figure class="zoomable-container step-card">
+            <div class="step-number">3</div>
+            <img class="zoomable" src="image/png/шаг 2.png" alt="Шаг 2: Устройства" data-caption="Шаг 2 — выбор устройств" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+            <figcaption class="step-title">Выбор устройств</figcaption>
+          </figure>
+          <figure class="zoomable-container step-card">
+            <div class="step-number">4</div>
+            <img class="zoomable" src="image/png/шаг 3.png" alt="Шаг 3: Расписание" data-caption="Шаг 3 — Расписание" loading="lazy" role="button" tabindex="0" aria-label="Увеличить изображение">
+            <figcaption class="step-title">Расписание трансляции</figcaption>
+          </figure>
+        </div>
+
+        <h3>Шаг 1: Создание трансляции</h3>
+        <ol>
+          <li>Выберите <strong>«Быстрая отправка».</strong></li>
+          <li>Установите разрешение и ориентацию ⚙️ <em>(по умолчанию, <b>1920×1080</b>).</em></li>
+          <li>Задайте наименование трансляции.</li>
+          <li>Перетащите контент в область путём Drag & Drop или выберите контент и нажмите добавить.</li>
+          <li>В <strong>timeline</strong> отображается весь добавленный контент и его порядок воспроизведения.
+            <ul>
+              <li>Возможно перемещение контента, а также удаление его или замена.</li>
+              <li>Для предпросмотра всей трансляции — нажмите на иконку <strong>Play</strong>.</li>
+              <li>При выборе статичного файла зайдите в раздел <strong>«Настройки контента»</strong> и при необходимости поменяйте длительность. <strong>Важно:</strong> для видеоконтента эта функция недоступна.</li>
+              <li>Нажмите на иконку сохранить — осуществится переход в следующий раздел.</li>
+            </ul>
+          </li>
+        </ol>
+
+        <h3>Шаг 2: Выбор устройств</h3>
+        <ol>
+          <li>Укажите, на какие устройства или группы отправить контент.</li>
+          <li>Подтвердите выбор — нажмите <strong>«Далее».</strong></li>
+        </ol>
+
+        <h3>Шаг 3: Настройка расписания</h3>
+        <ol>
+          <li>Установите дату и время показа.</li>
+          <li>Настройте повторение (однократно, ежедневно, навсегда).</li>
+          <li>Выберите приоритет трансляции — по умолчанию приоритет у новых трансляций <strong>низкий</strong>.</li>
+          <li>Сохраните.</li>
+        </ol>
+
+        <div class="note">
+          <strong>Опции:</strong> Приоритет трансляции можно менять, и также можно сделать отложенную загрузку файлов на устройства для экономии сети.
+        </div>
+      </section>
+
+      <!-- Отчёты -->
+      <section id="reports" class="section">
+        <h2 id="reports-title">📊 Отчёты</h2>
+        <p>Получайте статистику по:</p>
+        <ul>
+          <li>Работе устройств.</li>
+          <li>Показам трансляций.</li>
+          <li>Использованию контента.</li>
+        </ul>
+
+        <h3>Как сформировать отчёт?</h3>
+        <ol>
+          <li>Перейдите в раздел <strong>«Отчёты»</strong></li>
+          <li>Выберите тип отчёта и период</li>
+          <li>Укажите устройства</li>
+          <li>Сгенерируйте и скачайте</li>
+        </ol>
+      </section>
+
+      <!-- Troubleshooting -->
+      <section id="troubleshooting" class="section">
+        <h2 id="trouble-title">🛠️ Что делать, если: </h2>
+        <ul>
+          <li><strong>Устройство не подключается:</strong> проверьте подключение к сети, убедитесь, что на устройстве запущено приложение SmartPlayer, перезагрузите устройство.</li>
+          <li><strong>Контент не отображается:</strong> проверьте, добавлен ли файл(ы) в трансляцию, убедитесь, что трансляция загружена и активна на устройстве(ах).</li>
+          <li><strong>Скриншот не обновляется:</strong> нажмите <strong>«Обновить скриншот»</strong>, проверьте предоставлены ли <strong>«Root»</strong> права на устройстве, убедитесь, что устройство в сети.</li>
+        </ul>
+      </section>
+
+      <!-- Шпаргалка -->
+      <section id="cheatsheet" class="section">
+        <h2 id="cheat-title">🎯 Быстрый старт</h2>
+        <ul>
+          <li><strong>Добавить устройство:</strong> Установить дистрибутив → Устройства → Добавить → Ввести 9-значный код → заполнить карточку устройства.</li>
+          <li><strong>Загрузить контент в личный кабинет:</strong> Раздел «Контент» → Загрузить.</li>
+          <li><strong>Отправить контент быстро и пошагово:</strong> Быстрая отправка → Настройка зоны/области → Добавление контента → Назначить на устройства → Назначить расписание → Сохранить.</li>
+          <li>Чтобы проверить загрузку файлов на устройство: Раздел "Устройства" → выбрать необходимое → в меню устройства нажимаем → Загрузки.</li>
+          <li><strong>Снять скриншот c устройства:</strong> Открыть карточку устройства → «Обновить скриншот».</li>
+          <li><strong>При проблеме:</strong> Открыть раздел «Информация на устройстве» → нажать на иконку «Журнал устройства» → Выбрать тип → Сформировать → Перейти в «Журнал устройств» → Выбрать файл и скачать → Отправить в поддержку логи и «Идентификатор» устройства.</li>
+          <li><strong>Цвета статусов устройств:</strong> зелёный = online, серый = offline, красный = ошибка.</li>
+        </ul>
+      </section>
+
+      <!-- Поддержка -->
+      <section id="contacts" class="section">
+        <h2 id="contacts-title">📞 Поддержка</h2>
+        <p>Техническая поддержка: <a href="mailto:support@smartplayer.org">support@smartplayer.org</a></p>
+        <p>Полная документация: находится в разделе «Обзор» в вашем личном кабинете.</p>
+        <p>Отправляйте "Идентификатор" устройства при обращении в поддержку — это ускорит решение проблемы и поиск конкретного устройства.</p>
+      </section>
+
+      <!-- Ресурсные кнопки -->
+      <div class="resource-buttons">
+        <a href="https://wiki.smartplayer.org/index.php/SmartPlayer" class="resource-btn resource-btn-bz" target="_blank" rel="noopener noreferrer">
+          <div class="resource-btn-content">
+            <img src="image/png/БЗ.png" alt="База знаний SmartPlayer" loading="lazy">
+            <div class="resource-btn-desc">Полная документация и руководства по SmartPlayer</div>
+          </div>
+        </a>
+
+        <a href="https://smartplayer.atlassian.net/servicedesk/customer/portals" class="resource-btn resource-btn-tp" target="_blank" rel="noopener noreferrer">
+          <div class="resource-btn-content">
+            <img src="image/png/ТП.png" alt="Техническая поддержка SmartPlayer" loading="lazy">
+            <div class="resource-btn-desc">Обратиться в службу поддержки за помощью</div>
+          </div>
+        </a>
+      </div>
+
+      <footer>
+        Руководство составлено для клиентов SmartPlayer. Актуально на 2026 год. Интерфейс может незначительно меняться в новых версиях.
+      </footer>
+    </main>
+  </div>
+</div>
+
+<!-- Enhanced Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" tabindex="-1" aria-label="Увеличенное изображение">
+  <div class="lightbox-content" id="lightbox-content">
+    <img class="lightbox-img" id="lightbox-img" src="" alt="" draggable="false">
+  </div>
+  <div class="lightbox-controls" role="toolbar" aria-label="Управление масштабом">
+    <button class="lightbox-btn" id="lb-zoom-out" title="Уменьшить (Клавиша -)" aria-label="Уменьшить">−</button>
+    <button class="lightbox-btn" id="lb-reset" title="Сбросить масштаб (Клавиша 0)" aria-label="Сбросить масштаб">100%</button>
+    <button class="lightbox-btn" id="lb-zoom-in" title="Увеличить (Клавиша +)" aria-label="Увеличить">+</button>
+  </div>
+  <div class="zoom-level" id="zoom-level-display" aria-live="polite">100%</div>
+  <div class="drag-hint" id="drag-hint">Зажмите и перетащите для перемещения изображения</div>
+  <button class="lightbox-close" id="lightbox-close" title="Закрыть (Esc)" aria-label="Закрыть лайтбокс">×</button>
+  <div class="lightbox-caption" id="lightbox-caption" aria-live="polite"></div>
+</div>
+
+<script>
+  // === Автогенерация оглавления ===
+  document.addEventListener('DOMContentLoaded', function() {
+    const toc = document.getElementById('toc-list');
+    const sections = document.querySelectorAll('section.section');
+    const searchInput = document.getElementById('search-input');
+
+    sections.forEach(section => {
+      const h2 = section.querySelector('h2');
+      if (!h2 || !h2.id) return;
+
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#' + h2.id;
+      a.textContent = h2.textContent;
+      a.setAttribute('role', 'link');
+
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById(h2.id).scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      });
+
+      li.appendChild(a);
+      toc.appendChild(li);
+    });
+
+    // Поиск по оглавлению
+    searchInput.addEventListener('input', function() {
+      const searchTerm = this.value.toLowerCase().trim();
+      const tocItems = document.querySelectorAll('.toc-list li');
+
+      if (!searchTerm) {
+        tocItems.forEach(item => {
+          item.classList.remove('search-highlight');
+          item.style.display = '';
+        });
+        return;
+      }
+
+      tocItems.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+          item.classList.add('search-highlight');
+          item.style.display = '';
+        } else {
+          item.classList.remove('search-highlight');
+          item.style.display = 'none';
+        }
+      });
+    });
+
+    // Подсветка активного раздела при прокрутке
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          const tocLinks = document.querySelectorAll('.toc-list a');
+
+          tocLinks.forEach(link => {
+            link.parentElement.classList.remove('active');
+            if (link.getAttribute('href') === '#' + id) {
+              link.parentElement.classList.add('active');
+            }
+          });
+        }
+      });
+    }, { threshold: 0.5 });
+
+    sections.forEach(section => observer.observe(section));
+  });
+
+  // === Улучшенный лайтбокс с делегированием событий ===
+  (function() {
+          const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxContent = document.getElementById('lightbox-content');
+      const lightboxCaption = document.getElementById('lightbox-caption');
+      const zoomLevel = document.getElementById('zoom-level-display');
+      const zoomInBtn = document.getElementById('lb-zoom-in');
+      const zoomOutBtn = document.getElementById('lb-zoom-out');
+      const resetBtn = document.getElementById('lb-reset');
+      const closeBtn = document.getElementById('lightbox-close');
+      const dragHint = document.getElementById('drag-hint');
+
+      let currentZoom = 1;
+      let isDragging = false;
+      let startX, startY;
+      let translateX = 0, translateY = 0;
+
+      const minZoom = 0.5;
+      const maxZoom = 3;
+      const zoomStep = 0.2;
+
+      function updateTransform() {
+        if (currentZoom < minZoom) currentZoom = minZoom;
+        if (currentZoom > maxZoom) currentZoom = maxZoom;
+
+        const maxMove = 200;
+        translateX = Math.max(-maxMove, Math.min(maxMove, translateX));
+        translateY = Math.max(-maxMove, Math.min(maxMove, translateY));
+
+        lightboxImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentZoom})`;
+
+        const percent = Math.round(currentZoom * 100);
+        zoomLevel.textContent = `${percent}%`;
+        resetBtn.textContent = `${percent}%`;
+
+        if (currentZoom > 1.2) {
+          dragHint.style.display = 'block';
+        } else {
+          dragHint.style.display = 'none';
+        }
+      }
+
+      function resetTransform() {
+        currentZoom = 1;
+        translateX = 0;
+        translateY = 0;
+        updateTransform();
+      }
+
+      // Открытие лайтбокса через делегирование
+      document.getElementById('content').addEventListener('click', function(e) {
+        const img = e.target.closest('.zoomable');
+        if (!img) return;
+
+        e.preventDefault();
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+        lightboxCaption.textContent = img.dataset.caption || img.alt;
+        resetTransform();
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        if (currentZoom > 1.2) {
+          dragHint.style.display = 'block';
+        }
+      });
+
+      // Закрытие лайтбокса
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        resetTransform();
+      }
+
+      closeBtn.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+      });
+
+      // Управление с кнопок
+      zoomInBtn.addEventListener('click', () => {
+        if (currentZoom < maxZoom) {
+          currentZoom += zoomStep;
+          updateTransform();
+        }
+      });
+
+      zoomOutBtn.addEventListener('click', () => {
+        if (currentZoom > minZoom) {
+          currentZoom -= zoomStep;
+          updateTransform();
+        }
+      });
+
+      resetBtn.addEventListener('click', resetTransform);
+
+      // Перетаскивание
+      lightboxContent.addEventListener('mousedown', startDrag);
+      lightboxContent.addEventListener('touchstart', startDragTouch, { passive: false });
+
+      function startDrag(e) {
+        if (currentZoom <= 1.1) return;
+        e.preventDefault();
+        isDragging = true;
+        lightboxContent.classList.add('grabbing');
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', stopDrag);
+      }
+
+      function startDragTouch(e) {
+        if (currentZoom <= 1.1) return;
+        e.preventDefault();
+        isDragging = true;
+        lightboxContent.classList.add('grabbing');
+        const touch = e.touches[0];
+        startX = touch.clientX - translateX;
+        startY = touch.clientY - translateY;
+        document.addEventListener('touchmove', dragTouch, { passive: false });
+        document.addEventListener('touchend', stopDrag);
+      }
+
+      function drag(e) {
+        if (!isDragging) return;
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        updateTransform();
+      }
+
+      function dragTouch(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        translateX = touch.clientX - startX;
+        translateY = touch.clientY - startY;
+        updateTransform();
+      }
+
+      function stopDrag() {
+        isDragging = false;
+        lightboxContent.classList.remove('grabbing');
+        document.removeEventListener('mousemove', drag);
+        document.removeEventListener('touchmove', dragTouch);
+        document.removeEventListener('mouseup', stopDrag);
+        document.removeEventListener('touchend', stopDrag);
+      }
+
+      // Управление с клавиатуры
+      document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+
+        switch(e.key) {
+          case 'Escape':
+            closeLightbox();
+            break;
+          case '+':
+          case '=':
+            if (currentZoom < maxZoom) {
+              currentZoom += zoomStep;
+              updateTransform();
+            }
+            break;
+          case '-':
+            if (currentZoom > minZoom) {
+              currentZoom -= zoomStep;
+              updateTransform();
+            }
+            break;
+          case '0':
+            resetTransform();
+            break;
+        }
+      });
+
+      // Zoom колесом мыши
+      lightboxContent.addEventListener('wheel', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        e.preventDefault();
+
+        if (e.deltaY < 0 && currentZoom < maxZoom) {
+          currentZoom += zoomStep;
+        } else if (e.deltaY > 0 && currentZoom > minZoom) {
+          currentZoom -= zoomStep;
+        } else {
+          return;
+        }
+        updateTransform();
+      }, { passive: false });
+
+      // Обработка ошибок загрузки
+      lightboxImg.addEventListener('error', function() {
+        this.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"><rect width="400" height="300" fill="%23f3f4f6"/><text x="200" y="150" text-anchor="middle" fill="%236b7280" font-family="Arial" font-size="14">Изображение не загружено</text></svg>';
+        lightboxCaption.textContent = 'Ошибка загрузки изображения';
+      });
+
+      // Обработка ошибок у ресурсных изображений
+      document.querySelectorAll('.resource-btn img').forEach(img => {
+        img.addEventListener('error', function() {
+          this.remove();
+          const parent = this.closest('.resource-btn-content');
+          if (parent) {
+            parent.innerHTML = '<div class="resource-btn-desc">Изображение недоступно</div>';
+          }
+        });
+      });
+    })();
+</script>
+</body>
+</html>
